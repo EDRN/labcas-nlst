@@ -31,3 +31,7 @@ COPY config/nlst-workflow $OODT_CONFIG/nlst-workflow
 
 # install custom PGEs
 COPY pges/nlst-workflow $PGE_ROOT/nlst-workflow
+
+# additional supervisor configuration to start rabbitmq client
+COPY config/supervisor/supervisord-rmqclient.conf /etc/supervisor/conf.d/supervisord-rmq-client.conf
+

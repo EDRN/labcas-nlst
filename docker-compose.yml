@@ -31,12 +31,38 @@ services:
     ports:
       - "9001"
     environment:
-      - "FILEMGR_URL=http://filemgr:9000"
+      - "FILEMGR_URL=http://oodt-filemgr:9000/"
+      - "WORKFLOW_URL=http://localhost:9001/"
+      - "RABBITMQ_USER_URL=amqp://oodt-user:changeit@oodt-rabbitmq/%2f"
+      - "RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@oodt-rabbitmq:15672"
+      - "WORKFLOW_QUEUE=nlst-workflow"
+      - "MAX_WORKFLOWS=1"
+    #entrypoint: ["tail", "-f", "dev/null"]
     volumes:
       #- ./config/:/usr/local/oodt/workflows
       #- ./pges:/usr/local/oodt/pges/
+      - /Users/cinquini/data/NLST_trial:/NLST_trial
       - jobs:/usr/local/oodt/jobs
       - archive:/usr/local/oodt/archive
+    depends_on:
+      - oodt-rabbitmq
+      
+  # RabbitMQ server
+  oodt-rabbitmq:
+    image: acce/oodt-rabbitmq:${ACCE_VERSION}
+    container_name: rabbitmq
+    expose:
+      - "5672"
+      - "15672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - "RABBITMQ_USER_URL=amqp://oodt-user:changeit@localhost/%2f"
+      - "RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@localhost:15672"
+    volumes:
+      # driver program to submit workflows
+      - ./scripts/nlst_workflow_driver.py:/usr/local/oodt/rabbitmq/nlst_workflow_driver.py
 
 # shared data volumes
 volumes:
