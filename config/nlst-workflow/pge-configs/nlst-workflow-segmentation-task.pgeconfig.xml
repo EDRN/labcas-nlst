@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pgeConfig>
+
+	<!-- PGE commands -->
+	<exe dir="[JobDir]" shell="/bin/bash">
+		<cmd>cd [JobDir]</cmd>
+		<cmd>export PATH=$ANACONDA_HOME/bin:$PATH</cmd>
+		<cmd>mkdir output</cmd>
+        <cmd>python -u [PGE_ROOT]/nlst-workflow/segmentation.py /NLST_trial/217676 ./output</cmd>
+	</exe>
+
+	<customMetadata>
+		<metadata key="ProductionDateTime" val="[DATE.UTC]" />
+        <metadata key="JobDir" val="[OODT_HOME]/jobs/[WorkflowInstId]" />
+	</customMetadata>
+
+	<!-- CAS Crawler directives -->
+	<output>
+	  <dir path="[JobDir]" createBeforeExe="false">
+            <files regExp="output.*\.png" 
+                   metFileWriterClass="org.apache.oodt.cas.pge.writers.metlist.MetadataListPcsMetFileWriter" 
+                   args="[OODT_CONFIG]/nlst-workflow/pge-configs/metout.xml" />
+          </dir>
+	</output>
+
+
+</pgeConfig>

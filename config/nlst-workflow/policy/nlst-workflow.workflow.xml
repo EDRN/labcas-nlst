@@ -1,0 +1,9 @@
+<cas:workflow xmlns:cas="http://oodt.jpl.nasa.gov/1.0/cas" 
+              name="NLST Workflow" 
+              id="urn:oodt:NlstWorkflow">
+
+  <tasks>  	
+    <task id="urn:oodt:NlstSegmentationTask" />
+  </tasks>
+
+</cas:workflow>

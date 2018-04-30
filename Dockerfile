@@ -24,6 +24,10 @@ RUN /bin/bash -c "source $ANACONDA_HOME/bin/activate && \
     pip install Pillow && \
     pip install pandas && \
     pip install scikit-image"
-
 ENV PATH=$ANACONDA_HOME/bin:$PATH
-COPY src/segmentation.py /usr/local/src/segmentation.py
+
+# install custom OODT Workflow Manager configuration
+COPY config/nlst-workflow $OODT_CONFIG/nlst-workflow
+
+# install custom PGEs
+COPY pges/nlst-workflow $PGE_ROOT/nlst-workflow
