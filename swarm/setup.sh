@@ -21,7 +21,7 @@ token_manager=`docker swarm join-token --quiet manager`
 #docker node update --availability drain swarm-manager
 
 # start swarm visualizer on swarm manager
-docker run -it -d -p 5000:8080 -e HOST=$MANAGER_IP -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
+docker run -it -d --name visualizer -p 5000:8080 -e HOST=$MANAGER_IP -v /var/run/docker.sock:/var/run/docker.sock dockersamples/visualizer
 
 # join the swarm
 eval $(docker-machine env swarm-worker1)
