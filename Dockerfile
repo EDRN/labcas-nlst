@@ -4,7 +4,7 @@ FROM acce/oodt-wmgr:${ACCE_VERSION}
 MAINTAINER Luca Cinquini <luca.cinquini@jpl.nasa.gov>
 
 RUN apt-get update
-RUN apt-get install -y bzip2
+RUN apt-get install -y bzip2 vim
 RUN apt-get install -y libglapi-mesa libosmesa6
 
 # install anaconda

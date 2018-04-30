@@ -1,0 +1,44 @@
+# docker-compose file for LabCAS NSLT workflow:
+# o starts up a Workflow Manager and a File Manager container running on the same Docker host
+# o configures the Workflow Manager and File Manager to execute the 'nlst-workflow' workflow
+
+version: '3'
+
+services:
+
+  # OODT file manager
+  oodt_filemgr:
+    image: acce/oodt-filemgr:${ACCE_VERSION}
+    container_name: filemgr
+    expose:
+      - "9000"
+      - "8983"
+    ports:
+      - "8983:8983"
+      - "9000:9000"
+    volumes:
+      - ./config:/usr/local/oodt/workflows
+      - jobs:/usr/local/oodt/jobs
+      - archive:/usr/local/oodt/archive
+
+  # OODT workflow manager w/ NLST PGE
+  labcas-nlst:
+    #image: acce/oodt-wmgr:${ACCE_VERSION}
+    image: edrn/labcas-nlst
+    container_name: labcas-nlst
+    expose:
+      - "9001"
+    ports:
+      - "9001"
+    environment:
+      - "FILEMGR_URL=http://filemgr:9000"
+    volumes:
+      #- ./config/:/usr/local/oodt/workflows
+      #- ./pges:/usr/local/oodt/pges/
+      - jobs:/usr/local/oodt/jobs
+      - archive:/usr/local/oodt/archive
+
+# shared data volumes
+volumes:
+  jobs:
+  archive:
