@@ -1,8 +1,8 @@
 #!/bin/sh
 # Initializes the swarm, starts swarm visualizer tool.
 
-# TODO: change to specific IP address
-export MANAGER_IP=172.20.2.81
+# note: the private EX2 instance IP address is available like so:
+export MANAGER_IP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
 docker swarm init --advertise-addr $MANAGER_IP
 token_worker=`docker swarm join-token --quiet worker`
 echo $token_worker
