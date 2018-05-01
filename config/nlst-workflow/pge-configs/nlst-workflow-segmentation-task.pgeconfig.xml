@@ -6,14 +6,15 @@
 		<cmd>cd [JobDir]</cmd>
 		<cmd>export PATH=$ANACONDA_HOME/bin:$PATH</cmd>
 		<cmd>mkdir output</cmd>
-        <!-- <cmd>python -u [PGE_ROOT]/nlst-workflow/segmentation.py /NLST_trial/217676 ./output</cmd> -->
-        <!-- FIXME -->
+        <cmd>python -u [PGE_ROOT]/nlst-workflow/segmentation.py /NLST_trial/217676 ./output</cmd>
+        <!-- FIXME
         <cmd>cp [OODT_HOME]/jobs/output/1_patient_structure.png output/1_patient_structure_[Patient].png</cmd>
         <cmd>cp [OODT_HOME]/jobs/output/2_pre_segment.png output/2_pre_segment_[Patient].png</cmd>
         <cmd>cp [OODT_HOME]/jobs/output/3_post_segment.png output/3_post_segment_[Patient].png</cmd>
         <cmd>cp [OODT_HOME]/jobs/output/4_bones_only.png output/4_bones_only_[Patient].png</cmd>
         <cmd>cp [OODT_HOME]/jobs/output/5_remove_bones.png output/5_remove_bones_[Patient].png</cmd>
         <cmd>cp [OODT_HOME]/jobs/output/6_final_preprocessed.png output/6_final_preprocessed_[Patient].png</cmd>
+        -->
 	</exe>
 
 	<customMetadata>

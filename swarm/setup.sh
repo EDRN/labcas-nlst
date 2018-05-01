@@ -52,7 +52,7 @@ docker service create --replicas 1 --name rabbitmq -p 5672:5672 -p 15672:15672 \
 # start OODT File Manager on swarm-manager
 docker service create --replicas 1 --name filemgr -p 9000:9000 -p 8983:8983 \
        --network swarm-network --constraint 'node.labels.oodt_type==oodt_manager' \
-       --mount type=bind,src=${PWD}/../config/nlst-workflow,dst=/usr/local/oodt/workflows/nlst-workflow \
+       --mount type=bind,src=${NLST_SRC}/config/nlst-workflow,dst=/usr/local/oodt/workflows/nlst-workflow \
        --mount type=bind,src=${OODT_JOBS},dst=/usr/local/oodt/jobs \
        --mount type=bind,src=${OODT_ARCHIVE},dst=/usr/local/oodt/archive \
        acce/oodt-filemgr:${ACCE_VERSION}
