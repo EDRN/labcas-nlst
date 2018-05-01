@@ -28,6 +28,9 @@
             <files regExp=".*\.png" 
                    metFileWriterClass="org.apache.oodt.cas.pge.writers.metlist.MetadataListPcsMetFileWriter" 
                    args="[OODT_CONFIG]/nlst-workflow/pge-configs/metout.xml" />
+            <files regExp=".*\.npy" 
+                   metFileWriterClass="org.apache.oodt.cas.pge.writers.metlist.MetadataListPcsMetFileWriter" 
+                   args="[OODT_CONFIG]/nlst-workflow/pge-configs/metout.xml" />
           </dir>
 	</output>
 
