@@ -6,6 +6,15 @@
 # - 'node.role==manager'
 # - 'node.role==worker'
 
+# def environment
+export ACCE_VERSION=2.0
+export NLST_SRC=/labcas_data/labcas-nlst
+export NLST_DATA=/labcas_data/NLST_trial
+export OODT_JOBS=/labcas_data/labcas_jobs
+export OODT_ARCHIVE=/labcas_data/labcas_archive
+mkdir -p $OODT_JOBS
+mkdir -p $OODT_ARCHIVE
+
 # OODT file manager
 docker service create --replicas 1 --name filemgr -p 9000:9000 -p 8983:8983 \
        --network swarm-network --constraint 'node.role==manager' \
@@ -35,3 +44,4 @@ docker service create --replicas 1 --name wmgr --network swarm-network --constra
                       --env 'WORKFLOW_QUEUE=nlst-workflow' \
                       --env 'MAX_WORKFLOWS=1' \
                       edrn/labcas-nlst:latest
+docker service scale wmgr=2
