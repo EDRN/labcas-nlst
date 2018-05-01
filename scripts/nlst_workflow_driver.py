@@ -16,21 +16,22 @@ LOG_FILE = "test_workflow_driver.log" # in current directory
 NLST_WORKFLOW = 'nlst-workflow'
 SLEEP_TIME = 0 # time to wait before sending the next message
 
-def worker(patient):
+def worker(patient_ids):
     '''Function that sends the messages to execute the runs.'''
 
-    LOGGER.info("Submitting message for patient #: %s" % patient)
-
-    msg_queue = NLST_WORKFLOW
-    num_msgs = 1
-    msg_dict = { 'Patient': patient }
-
-    publish_messages(msg_queue, num_msgs, msg_dict)
+    for patient_id in patient_ids:
+        LOGGER.info("Submitting message for patient #: %s" % patient_id)
+    
+        msg_queue = NLST_WORKFLOW
+        num_msgs = 1
+        msg_dict = { 'Patient': patient_id }
+    
+        publish_messages(msg_queue, num_msgs, msg_dict)
 
     return
 
 
-def main(number_of_runs):
+def main(patient_ids):
     
     logging.basicConfig(level=logging.CRITICAL, format=LOG_FORMAT)
         
@@ -39,7 +40,7 @@ def main(number_of_runs):
 
     # send all messages in a separate thread
     # do not wait till completion
-    t = threading.Thread(target=worker, args=(number_of_runs,))
+    t = threading.Thread(target=worker, args=(patient_ids,))
     t.start()
     
     # wait for RabbitMQ server to process all messages in all queues
@@ -51,16 +52,16 @@ def main(number_of_runs):
 
     # write log file (append to existing file)
     with open(LOG_FILE, 'a') as log_file:
-        log_file.write('number_of_runs=%s\t' % number_of_runs)
         log_file.write('elapsed_time_sec=%s\n' % (stopTime-startTime).seconds)
                         
 
 if __name__ == '__main__':
     """ Parse command line arguments. """
     
-    if len(sys.argv) < 1:
-        raise Exception("Usage: python nlst_workflow_driver.py <patient number>")
-    else:
-        patient = int( sys.argv[1] )
-
-    main(patient)
+    #if len(sys.argv) < 1:
+    #    raise Exception("Usage: python nlst_workflow_driver.py <patient number>")
+    #else:
+    #   patient = int( sys.argv[1] )
+    
+    patient_ids = range(100)
+    main(patient_ids)

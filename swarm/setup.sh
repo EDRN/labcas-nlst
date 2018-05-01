@@ -36,14 +36,14 @@ docker network create -d overlay swarm-network
 
 # assign functional labels to nodes
 eval $(docker-machine env swarm-manager)
-docker node update --label-add oodt_type=filemgr swarm-manager
-docker node update --label-add oodt_type=wmgr swarm-worker1
-docker node update --label-add oodt_type=wmgr swarm-worker2
+docker node update --label-add oodt_type=oodt_manager swarm-manager
+docker node update --label-add oodt_type=oodt_worker swarm-worker1
+docker node update --label-add oodt_type=oodt_worker swarm-worker2
 
 # start RabbitMQ server
 eval $(docker-machine env swarm-manager)
 docker service create --replicas 1 --name rabbitmq -p 5672:5672 -p 15672:15672 \
-       --network swarm-network --constraint 'node.labels.oodt_type==filemgr' \
+       --network swarm-network --constraint 'node.labels.oodt_type==oodt_manager' \
        --env 'RABBITMQ_USER_URL=amqp://oodt-user:changeit@localhost/%2f' \
        --env 'RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@localhost:15672'\
        --mount type=bind,src=${PWD}/../scripts/nlst_workflow_driver.py,dst=/usr/local/oodt/rabbitmq/nlst_workflow_driver.py \
@@ -51,7 +51,7 @@ docker service create --replicas 1 --name rabbitmq -p 5672:5672 -p 15672:15672 \
 
 # start OODT File Manager on swarm-manager
 docker service create --replicas 1 --name filemgr -p 9000:9000 -p 8983:8983 \
-       --network swarm-network --constraint 'node.labels.oodt_type==filemgr' \
+       --network swarm-network --constraint 'node.labels.oodt_type==oodt_manager' \
        --mount type=bind,src=${PWD}/../config/nlst-workflow,dst=/usr/local/oodt/workflows/nlst-workflow \
        --mount type=bind,src=${OODT_JOBS},dst=/usr/local/oodt/jobs \
        --mount type=bind,src=${OODT_ARCHIVE},dst=/usr/local/oodt/archive \
@@ -61,10 +61,11 @@ docker service create --replicas 1 --name filemgr -p 9000:9000 -p 8983:8983 \
 # then start workflow managers on worker nodes
 # including rabbitmq consumers for workflow 'nlst-workflow'
 sleep 5
-docker service create --replicas 1 --name wmgr --network swarm-network --constraint 'node.labels.oodt_type==wmgr' \
+docker service create --replicas 1 --name wmgr --network swarm-network --constraint 'node.labels.oodt_type==oodt_worker' \
                       --mount type=bind,src=${OODT_JOBS},dst=/usr/local/oodt/jobs \
                       --mount type=bind,src=${OODT_ARCHIVE},dst=/usr/local/oodt/archive \
                       --mount type=bind,src=${NLST_DATA},dst=/NLST_trial \
+                      --mount type=bind,src=${PWD}/../config/nlst-workflow,dst=/usr/local/oodt/workflows/nlst-workflow \
                       --env 'RABBITMQ_USER_URL=amqp://oodt-user:changeit@rabbitmq/%2f' \
                       --env 'RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@rabbitmq:15672' \
                       --env 'FILEMGR_URL=http://filemgr:9000/' \
