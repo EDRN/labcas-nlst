@@ -6,7 +6,7 @@
 		<cmd>cd [JobDir]</cmd>
 		<cmd>export PATH=$ANACONDA_HOME/bin:$PATH</cmd>
 		<cmd>mkdir output</cmd>
-        <cmd>python -u [PGE_ROOT]/nlst-workflow/segmentation.py /NLST_trial/[Patient] ./output</cmd>
+        <cmd>python -u [PGE_ROOT]/nlst-workflow/segmentation.py /NLST/[Patient] ./output</cmd>
 	</exe>
 
 	<customMetadata>
