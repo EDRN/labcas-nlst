@@ -9,7 +9,7 @@
 # def environment
 export ACCE_VERSION=2.0
 export NLST_SRC=/labcas_data/labcas-nlst
-export NLST_DATA=/labcas_data/NLST_trial
+export NLST_DATA=/labcas_data/NLST
 export OODT_JOBS=/labcas_data/labcas_jobs
 export OODT_ARCHIVE=/labcas_data/labcas_archive
 mkdir -p $OODT_JOBS
@@ -35,7 +35,7 @@ docker service create --replicas 1 --name rabbitmq -p 5672:5672 -p 15672:15672 \
 docker service create --replicas 1 --name wmgr --network swarm-network --constraint 'node.role==worker' \
                       --mount type=bind,src=${OODT_JOBS},dst=/usr/local/oodt/jobs \
                       --mount type=bind,src=${OODT_ARCHIVE},dst=/usr/local/oodt/archive \
-                      --mount type=bind,src=${NLST_DATA},dst=/NLST_trial \
+                      --mount type=bind,src=${NLST_DATA},dst=/NLST \
                       --mount type=bind,src=${NLST_SRC}/config/nlst-workflow,dst=/usr/local/oodt/workflows/nlst-workflow \
                       --env 'RABBITMQ_USER_URL=amqp://oodt-user:changeit@rabbitmq/%2f' \
                       --env 'RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@rabbitmq:15672' \
