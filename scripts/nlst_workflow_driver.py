@@ -63,5 +63,7 @@ if __name__ == '__main__':
     #else:
     #   patient = int( sys.argv[1] )
     
-    patient_ids = range(100)
+    #patient_ids = range(10)
+    patient_ids = ["217676", "217724", "218035", "218098", "218307",
+                   "218420", "218757", "218810", "218056", "218252"]
     main(patient_ids)
