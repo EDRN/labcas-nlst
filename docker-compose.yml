@@ -22,10 +22,10 @@ services:
       - archive:/usr/local/oodt/archive
 
   # OODT workflow manager w/ NLST PGE
-  labcas-nlst:
+  oodt_wmgr: 
     #image: acce/oodt-wmgr:${ACCE_VERSION}
     image: edrn/labcas-nlst
-    container_name: labcas-nlst
+    container_name: wmgr
     expose:
       - "9001"
     ports:
@@ -36,14 +36,16 @@ services:
       - "RABBITMQ_USER_URL=amqp://oodt-user:changeit@oodt-rabbitmq/%2f"
       - "RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@oodt-rabbitmq:15672"
       - "WORKFLOW_QUEUE=nlst-workflow"
-      - "MAX_WORKFLOWS=1"
+      - "MAX_WORKFLOWS=2"
     #entrypoint: ["tail", "-f", "dev/null"]
     volumes:
       #- ./config/:/usr/local/oodt/workflows
       #- ./pges:/usr/local/oodt/pges/
-      - /Users/cinquini/data/NLST_trial:/NLST_trial
+      #- /Users/cinquini/data/NLST:/NLST
       - jobs:/usr/local/oodt/jobs
       - archive:/usr/local/oodt/archive
+      # FIXME
+      #- ${HOME}/eclipse-workspace/oodt-rabbitmq-clients/python:/usr/local/oodt/rabbitmq
     depends_on:
       - oodt-rabbitmq
       
@@ -61,6 +63,8 @@ services:
       - "RABBITMQ_USER_URL=amqp://oodt-user:changeit@localhost/%2f"
       - "RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@localhost:15672"
     volumes:
+      # FIXME
+      #- ${HOME}/eclipse-workspace/oodt-rabbitmq-clients/python:/usr/local/oodt/rabbitmq
       # driver program to submit workflows
       - ./scripts/nlst_workflow_driver.py:/usr/local/oodt/rabbitmq/nlst_workflow_driver.py
 
