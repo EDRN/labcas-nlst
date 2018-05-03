@@ -1,0 +1,62 @@
+# Kubernetes deployment file for OODT Workflow Manager server
+apiVersion: v1
+kind: Service
+metadata:
+  name: wmgr
+  labels:
+    stack: acce
+    component: wmgr
+spec:
+  type: NodePort
+  ports:
+  - port: 9001
+    targetPort: 9001
+    protocol: TCP
+    name: xmlrpc
+  selector:
+    stack: acce
+    component: wmgr
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: oodt-wmgr
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        stack: acce
+        component: wmgr
+    spec:
+      containers:
+      - name: wmgr
+        # FIXME
+        image: acce/oodt-wmgr:2.0
+        #image: edrn/labcas-nlst:latest
+        ports:
+        - containerPort: 9001
+        env:
+        # example connection URL for rabbitmq message producers - override as needed
+        - name: RABBITMQ_USER_URL
+          value: "amqp://oodt-user:changeit@oodt-rabbitmq/%2f"
+        - name: RABBITMQ_ADMIN_URL
+          value: "http://oodt-admin:changeit@oodt-rabbitmq:15672"
+        - name: FILEMGR_URL
+          value: "http://oodt-filemgr:9000/"
+        - name: WORKFLOW_URL
+          value: "http://localhost:9001/"
+        - name: WORKFLOW_QUEUE
+          value: "nlst-workflow"
+        - name: MAX_WORKFLOWS
+          value: "2"
+        volumeMounts:
+        - name: oodt-archive 
+          mountPath: /usr/local/oodt/archive/
+        - name: oodt-jobs
+          mountPath: /usr/local/oodt/jobs/
+      volumes:
+      - name: oodt-archive
+        emptyDir: {}
+      - name: oodt-jobs
+        emptyDir: {}

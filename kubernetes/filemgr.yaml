@@ -1,0 +1,57 @@
+# Kubernetes deployment file for OODT File Manager server
+apiVersion: v1
+kind: Service
+metadata:
+  name: filemgr
+  labels:
+    stack: acce
+    component: filemgr
+spec:
+  type: NodePort
+  ports:
+  - port: 9000
+    targetPort: 9000
+    protocol: TCP
+    name: xmlrpc
+  - port: 8983
+    targetPort: 8983
+    protocol: TCP
+    name: solr
+  selector:
+    stack: acce
+    component: filemgr
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: oodt-filemgr
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        stack: acce
+        component: filemgr
+    spec:
+      containers:
+      - name: filemgr
+        image: acce/oodt-filemgr:2.0
+        ports:
+        - containerPort: 9000
+        - containerPort: 8983
+        volumeMounts:
+        - name: oodt-archive 
+          mountPath: /usr/local/oodt/archive/
+        - name: oodt-jobs
+          mountPath: /usr/local/oodt/jobs/
+        #- name: filemgr-config
+        #  mountPath: /usr/local/oodt/workflows
+      volumes:
+      - name: oodt-archive
+        emptyDir: {}
+      - name: oodt-jobs
+        emptyDir: {}
+      #- name: filemgr-config
+      #  hostPath:
+          # FIXME
+      #    path: /Users/cinquini/eclipse-workspace/labcas-nlst/config
