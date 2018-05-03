@@ -44,13 +44,13 @@ spec:
           mountPath: /usr/local/oodt/archive/
         - name: oodt-jobs
           mountPath: /usr/local/oodt/jobs/
-        - name: filemgr-config
-          mountPath: /usr/local/oodt/workflows
+        - name: filemgr-policy
+          mountPath: /usr/local/oodt/workflows/nlst-workflow/policy
       volumes:
       - name: oodt-archive
         emptyDir: {}
       - name: oodt-jobs
         emptyDir: {}
-      - name: filemgr-config
+      - name: filemgr-policy
         hostPath:
-          path: /Users/cinquini/eclipse-workspace/labcas-nlst/config
+          path: /labcas-nlst/config/nlst-workflow/policy

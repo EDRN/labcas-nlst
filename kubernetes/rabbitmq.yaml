@@ -7,17 +7,16 @@ metadata:
     stack: acce
     component: rabbitmq
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 5672
     targetPort: 5672
     protocol: TCP
-    name: rmq-client-port
+    name: client-port
   - port: 15672
     targetPort: 15672
     protocol: TCP
-    name: rmq-web-port
-  # the selector identifies the set of pods to load-balance against
+    name: web-port
   selector:
     stack: acce
     component: rabbitmq
@@ -46,8 +45,10 @@ spec:
           value: "amqp://oodt-user:changeit@localhost/%2f"
         - name: RABBITMQ_ADMIN_URL
           value: "http://oodt-admin:changeit@localhost:15672"
+        volumeMounts:
+        - name: rmq-producer-scripts
+          mountPath: /usr/local/oodt/scripts
       volumes:
-      - name: rmq-producer-script
+      - name: rmq-producer-scripts
         hostPath:
-          # FIXME
-          path: /Users/cinquini/eclipse-workspace/labcas-nlst/scripts/nlst_workflow_driver.py:/usr/local/oodt/rabbitmq/nlst_workflow_driver.py
+          path: /Users/cinquini/eclipse-workspace/labcas-nlst/scripts
