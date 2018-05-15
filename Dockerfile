@@ -24,7 +24,7 @@ RUN /bin/bash -c "source $CONDA_HOME/bin/activate && \
     pip install Pillow && \
     pip install pandas && \
     pip install scikit-image"
-ENV PATH=$CONDA_HOME/bin:$PATH
+ENV PATH=$CONDA_HOME/bin:$PATH:/usr/local/bin
 
 # install custom OODT Workflow Manager configuration
 COPY config/nlst-workflow $OODT_CONFIG/nlst-workflow
