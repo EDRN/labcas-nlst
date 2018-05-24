@@ -28,6 +28,7 @@ docker service create --replicas 1 --name rabbitmq -p 5672:5672 -p 15672:15672 \
        --network swarm-network --constraint 'node.role==manager' \
        --env 'RABBITMQ_USER_URL=amqp://oodt-user:changeit@localhost/%2f' \
        --env 'RABBITMQ_ADMIN_URL=http://oodt-admin:changeit@localhost:15672'\
+       --mount type=bind,src=${NLST_DATA},dst=/NLST \
        --mount type=bind,src=${NLST_SRC}/scripts/nlst_workflow_driver.py,dst=/usr/local/oodt/rabbitmq/nlst_workflow_driver.py \
        acce/oodt-rabbitmq:${ACCE_VERSION}
 
