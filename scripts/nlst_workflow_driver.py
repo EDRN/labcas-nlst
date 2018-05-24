@@ -4,6 +4,7 @@
 # Usage: python test_workflow_driver.py <number_of_runs>
 
 import logging
+import os
 import sys
 import datetime
 import time
@@ -58,12 +59,17 @@ def main(patient_ids):
 if __name__ == '__main__':
     """ Parse command line arguments. """
     
-    #if len(sys.argv) < 1:
-    #    raise Exception("Usage: python nlst_workflow_driver.py <patient number>")
-    #else:
-    #   patient = int( sys.argv[1] )
-    
+    if len(sys.argv) < 2:
+        raise Exception("Usage: python nlst_workflow_driver.py <patients dir> [<max number of patients>]")
+    else:
+        patients_dir = sys.argv[1]
+        patients = filter(lambda x: os.path.isdir(os.path.join(patients_dir, x)), os.listdir(patients_dir))
+        patients = sorted(patients)
+        if len(sys.argv) == 3:
+            max_patients = int( sys.argv[2] )
+            patients = patients[0:max_patients]
+        
     #patient_ids = range(10)
-    patient_ids = ["217676", "217724", "218035", "218098", "218307",
-                   "218420", "218757", "218810", "218056", "218252"]
-    main(patient_ids)
+    #patient_ids = ["217676", "217724", "218035", "218098", "218307",
+    #               "218420", "218757", "218810", "218056", "218252"]
+    main(patients)
