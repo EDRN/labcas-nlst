@@ -44,4 +44,4 @@ docker service create --replicas 1 --name wmgr --network swarm-network --constra
                       --env 'WORKFLOW_QUEUE=nlst-workflow' \
                       --env 'MAX_WORKFLOWS=1' \
                       edrn/labcas-nlst:latest
-docker service scale wmgr=2
+#docker service scale wmgr=2
